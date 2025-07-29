@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 model = os.getenv("MODEL_NAME")
 
 # Define the AI Agent
-agent = LlmAgent(
+root_agent = LlmAgent(
     name="ThreatReportAgent",
     description="An agent that provides summaries of AI governance policies from various websites, categorized by region.",
     instruction=MAIN_PROMPT,
@@ -36,7 +36,7 @@ session = session_service.create_session(app_name=APP_NAME, user_id=USER_ID, ses
 logger.info(f"Created session: {session}")
 
 runner = Runner(
-    agent = agent,
+    agent = root_agent,
     session_service = session_service,
     app_name=APP_NAME, 
 )
