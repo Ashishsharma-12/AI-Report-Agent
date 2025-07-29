@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 import asyncio
-from tools.tools import summarize_ai_governance_by_region
+from .tools.tools import summarize_ai_governance_by_region
 from google.adk.agents import LlmAgent
-from prompt import MAIN_PROMPT
+from .prompt import MAIN_PROMPT
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner 
 from google.genai import types
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 model = os.getenv("MODEL_NAME")
 
 # Define the AI Agent
-root_agent = LlmAgent(
+agent = LlmAgent(
     name="ThreatReportAgent",
     description="An agent that provides summaries of AI governance policies from various websites, categorized by region.",
     instruction=MAIN_PROMPT,
@@ -36,7 +36,7 @@ session = session_service.create_session(app_name=APP_NAME, user_id=USER_ID, ses
 logger.info(f"Created session: {session}")
 
 runner = Runner(
-    agent = root_agent,
+    agent = agent,
     session_service = session_service,
     app_name=APP_NAME, 
 )

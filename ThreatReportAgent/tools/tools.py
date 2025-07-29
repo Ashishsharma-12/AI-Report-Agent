@@ -1,16 +1,10 @@
 from dotenv import load_dotenv, find_dotenv
-import os
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from typing import Dict, List
-from google.adk.agents import LlmAgent
-from google.genai import types
-from google.adk.tools import google_search
 import logging
-from prompt import WEBSITE_LIST, REGION_MAP
 from .SearchAgent import run_search
-import asyncio
 
 # Load environment variables
 
@@ -18,6 +12,20 @@ load_dotenv(find_dotenv())
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Sample list of websites to monitor
+WEBSITE_LIST = [
+    "https://ec.europa.eu/commission/presscorner/detail/en/ip_21_1682",
+    "https://www.gov.uk/government/publications/ai-regulation-a-pro-innovation-approach",
+    "https://post.parliament.uk/artificial-intelligence-ethics-governance-and-regulation/"
+]
+
+# Region tags based on source URL for filtering
+REGION_MAP = {
+    "europa.eu": "EMEA",
+    "gov.uk": "UK",
+    "parliament.uk": "EMEA"
+}
 
 # Function to extract text from a given URL
 def extract_text_from_url(url: str) -> str:
