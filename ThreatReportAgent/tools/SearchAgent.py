@@ -36,7 +36,7 @@ SearchAgent = LlmAgent(
     description="An agent that searches for information using Google Search.",
     instruction="Search for information using the available functions",
     tools=[extract_text_from_url, google_search],
-    model='gemini-2.5-flash'
+    model='gemini-2.5-pro'
 )
 
 APP_NAME = 'Search App'

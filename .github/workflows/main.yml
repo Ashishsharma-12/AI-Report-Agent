@@ -45,3 +45,10 @@ jobs:
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated
+
+    - name: Get Cloud Run URL
+      run: |
+        SERVICE_NAME="adk-agent-${{ github.ref_name }}"
+        URL=$(gcloud run services describe $SERVICE_NAME --region us-central1 --format='value(status.url)')
+        echo "Cloud Run URL: $URL"
+        echo "::set-output name=url::$URL"

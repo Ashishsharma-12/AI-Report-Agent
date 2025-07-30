@@ -15,7 +15,7 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8080
 
 # Set entrypoint
-CMD ["adk", "web"]
+CMD ["adk", "web", "--port", "8080"]
