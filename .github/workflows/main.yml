@@ -44,7 +44,8 @@ jobs:
           --image $IMAGE_NAME \
           --platform managed \
           --region us-central1 \
-          --allow-unauthenticated
+          --allow-unauthenticated \
+          --set-env-vars="GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT }},GOOGLE_CLOUD_LOCATION=us-central1,GOOGLE_GENAI_USE_VERTEXAI=TRUE"
 
     - name: Get Cloud Run URL
       run: |

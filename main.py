@@ -1,5 +1,4 @@
 import os
-
 import uvicorn
 from google.adk.cli.fast_api import get_fast_api_app
 
@@ -19,6 +18,7 @@ app = get_fast_api_app(
     session_service_uri=SESSION_SERVICE_URI,
     allow_origins=ALLOWED_ORIGINS,
     web=SERVE_WEB_INTERFACE,
+    trace_to_cloud=True,
 )
 
 # You can add more FastAPI routes or configurations below if needed
