@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 import asyncio
-from tools.tools import summarize_ai_governance_by_region
+from .utils.utils import get_urls_by_region, extract_text_from_urls
+from .utils.prompt import MAIN_PROMPT
 from google.adk.agents import LlmAgent
-from prompt import MAIN_PROMPT
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner 
 from google.genai import types
@@ -19,14 +19,14 @@ logger = logging.getLogger(__name__)
 model = os.getenv("MODEL_NAME")
 
 # Define the AI Agent
-agent = LlmAgent(
+root_agent = LlmAgent(
     name="ThreatReportAgent",
     description="An agent that provides summaries of AI governance policies from various websites, categorized by region.",
     instruction=MAIN_PROMPT,
-    tools=[summarize_ai_governance_by_region],
-    model=model
+    tools=[get_urls_by_region, extract_text_from_urls],
+    model='gemini-2.5-flash'
 )
-
+logger.info(f"Created agent: {root_agent}")
 APP_NAME = 'Threat Report App'
 USER_ID = 'Alpha1'
 SESSION_ID = 'Alpha1-Session1'
@@ -36,7 +36,7 @@ session = session_service.create_session(app_name=APP_NAME, user_id=USER_ID, ses
 logger.info(f"Created session: {session}")
 
 runner = Runner(
-    agent = agent,
+    agent = root_agent,
     session_service = session_service,
     app_name=APP_NAME, 
 )
@@ -80,7 +80,7 @@ async def call_agent_async(query: str, runner, user_id, session_id):
   print(f"<<< Agent Response: {final_response_text}")
   return final_response_text
 
-def ochestrate(query) -> str:
+def orchestrate(query) -> str:
     """Orchestrate the agent to answer the user's query.
     
     Args:
@@ -90,6 +90,7 @@ def ochestrate(query) -> str:
 
 
 if __name__ == "__main__":
-    response = ochestrate("What are the latest AI governance laws in the UK region?")
+    response = orchestrate("What are the latest AI governance laws in the UK region?")
     print(response)
+
     
